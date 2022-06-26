@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+
+        $(() => {
+            $('#accntno').blur(() => {
+                console.log("Blur event occurs");
+                let ip = $('#accntno').val();
+                console.log(ip);
+                let dbparams = {
+                    data: { input: ip },
+                    url: 'http://localhost:9090/accountBalance',
+                    type: 'get',
+                    dataType: 'json',
+                    success: (serverResponse) => {
+                        console.log("Successfullt recieved server Response");
+                        console.log(serverResponse);
+                        console.log(serverResponse[0].balance);
+
+                        $('#balance').text(serverResponse[0].balance);
+
+                    },
+                    error: (serverResponse) => {
+                        console.log('Error in serverResponse');
+                    }
+                };
+                $.ajax(dbparams);
+            });
+
+        });
+
+    </script>
+</head>
+
+<body>
+    <label for="accntno">Enter Account Number: </label>
+    <input type="number" id="accntno">
+    <span>Account Balance:<span id="balance"></span></span>
+</body>
+
+</html>

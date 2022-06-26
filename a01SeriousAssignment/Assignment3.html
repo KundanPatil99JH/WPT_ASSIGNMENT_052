@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment No 3</title>
+
+    <script>
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            console.log("Page loaded");
+            //Array details
+            let arr = [{ itemno: 25, price: 5000, qty: 35 },
+            { itemno: 26, price: 6000, qty: 40 },
+            { itemno: 27, price: 7000, qty: 45 }
+            ];
+
+
+            // contains
+            function contains() {
+                let x = "";
+                for (let i = 0; i < arr.length; i++) {
+
+                    x += "<br>" + " Item No : " + arr[i].itemno + " Item price :  " + arr[i].price + " Item Quantity :  " + arr[i].qty;
+                }
+                document.querySelector("#contains").innerHTML = x;
+            }
+            contains();
+
+
+            // Search details
+            let itemno = document.querySelector("#itemno");
+            itemno.addEventListener('blur', () => {
+
+                console.log("Blur Event");
+
+                let itemno = document.querySelector("#itemno").value;
+
+                let output = SearchdetailsLogic(itemno);
+
+                if (output) {
+                    document.querySelector("#msg").innerText = "Items Details Found";
+
+                    document.querySelector("#add").disabled = true;
+                    document.querySelector("#modify").disabled = false;
+                    document.querySelector("#delete").disabled = false;
+                    document.querySelector("#clearboxes").disabled = false;
+                }
+                else {
+                    document.querySelector("#msg").innerText = "Items Details  Not Found";
+
+                    document.querySelector("#add").disabled = false;
+                }
+            });
+
+            function SearchdetailsLogic(itemno) {
+                let output = false;
+
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].itemno == itemno) {
+                        output = true;
+                        document.querySelector("#itemno").value = arr[i].itemno;
+                        document.querySelector("#price").value = arr[i].price;
+                        document.querySelector("#qty").value = arr[i].qty;
+                    }
+                }
+                return output;
+            }
+
+            //add details
+
+            let add = document.querySelector("#add");
+            add.addEventListener('click', () => {
+                console.log("Add button click");
+
+                let input = addDetailsLogic();
+                arr.push(input);
+                console.log(arr);
+                contains();
+            });
+
+            function addDetailsLogic() {
+                let input = {
+                    itemno: parseInt(document.querySelector("#itemno").value),
+                    price: parseInt(document.querySelector("#price").value),
+                    qty: parseInt(document.querySelector("#qty").value)
+                };
+                return input;
+            }
+
+
+            //modify
+
+            let modify = document.querySelector("#modify");
+            modify.addEventListener('click', () => {
+
+                console.log("Modify button clicked");
+                let output = Modifydetailslogic(document.querySelector("#itemno").value);
+                contains();
+
+                if (output) {
+                    document.querySelector("#msg").innerText = "Items Details Modified";
+                }
+                else {
+                    document.querySelector("#msg").innerText = "Items Details Not Modified";
+                }
+            });
+
+            function Modifydetailslogic(itemno) {
+                let output = false;
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].itemno == itemno) {
+                        arr[i].itemno = document.querySelector("#itemno").value;
+                        arr[i].price = document.querySelector("#price").value;
+                        arr[i].qty = document.querySelector("#qty").value;
+                        output = true;
+                    }
+                }
+                return output;
+            }
+
+
+
+            //delete
+
+            let delete1 = document.querySelector("#delete");
+            delete1.addEventListener('click', () => {
+                console.log("Delete Button clicked");
+                let itemno = document.querySelector("#itemno").value;
+                let output = deleteDetailslogic(itemno);
+                contains();
+
+                if (output) {
+                    document.querySelector("#msg").innerText = "Items Details Deleted";
+                }
+                else {
+                    document.querySelector("#msg").innerText = "Items Details Not Deleted";
+                }
+            });
+
+            function deleteDetailslogic(itemno) {
+                let output = false;
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].itemno == itemno) {
+                        arr.splice(i, 1);
+                        output = true;
+                    }
+                }
+                return output;
+            }
+
+            //clear boxes
+
+            let clearboxes = document.querySelector("#clearboxes");
+
+            clearboxes.addEventListener('click', () => {
+                console.log("clearboxes button clicked");
+                document.querySelector("#itemno").value = "";
+                document.querySelector("#price").value = "";
+                document.querySelector("#qty").value = "";
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <input id="itemno" type="text" placeholder="Item No" />
+    <span id="msg">message</span><br>
+    <input id="price" type="text" placeholder="Item price" /><br>
+    <input id="qty" type="text" placeholder="Item qty" /><br>
+
+    <input id="add" type="button" value="Add" disabled />
+    <input id="modify" type="button" value="modify" disabled />
+    <input id="delete" type="button" value="delete" disabled />
+    <input id="clearboxes" type="button" value="Clear Boxes" disabled /><br>
+
+    <hr>
+    <span id="contains">Contains</span><br>
+</body>
+
+</html>
